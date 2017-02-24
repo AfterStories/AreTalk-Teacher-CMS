@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>课程列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../src/css/index.css" />
+    <link rel="stylesheet" href="../../src/layui/css/layui.css" />
+  </head>
+
+  <body>
+   
+      <p class="page-tab">
+        <span class="layui-breadcrumb" lay-separator=">"<a><cite>课程列表</cite></a></span>
+        </p>
+      <div class="handle-box">
+        <ul>
+          <li class="handle-item"><span class="fr"><a class="layui-btn btn-add btn-default" id="btn-adduser"><i class="linyer icon-add"></i>添加课程</a></span></li>
+        </ul>
+      </div>
+      <div class="layui-clear">
+        <div class="tableTools fr"></div>
+      </div>
+      <div id="table-lesson">
+  
+
+      </div>
+    </div>
+
+
+    <style>
+    .del{
+      margin-right:14px; 
+    }
+    #table-lesson{
+      width: 80%;
+      margin: 0 auto;
+      display: flex;
+      flex-flow: row wrap;
+      align-content: flex-start;
+    }
+
+    .Lessonblock{
+        flex: 0 0 20%;
+        cursor: pointer;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px; 
+        width:25vw;
+        height:10vw;
+        margin: 10px; 
+        color: #fff;
+        background-color:#1aa094;
+        border-radius:4px;
+
+    </style>
+    <script src="../../js/jquery-1.12.2.min.js"></script>
+    <script src="../../src/layui/layui.js"></script>
+    <script src="../../js/larry.js"></script>
+    <script src="../../src/js/define/common.js"></script>
+    <script>
+
+
+
+/*var dd1 = {
+         href: "HTML/product/period-list.html",
+         icon: "icon-zhandianpeizhi",
+         title: "b"
+        }
+
+        ;*/
+
+        function opentab(t){
+          var data = {
+           href: t.attr("data-url"),
+           icon: t.attr("data-icon"),
+           title: t.find("span").text()
+     }
+        
+          window.parent.OpenNewTab(data);
+        }
+
+             function getCookie(c_name) {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1) {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1) {
+                c_value = null;
+            }
+            else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = c_value.length;
+                }
+                c_value = unescape(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+
+
+ $(function() {
+             var Sessionid = getCookie("JSESSIONID")
+
+            $.ajax({
+                type: "GET",
+                url: 'http://192.168.188.16:8090/AreTalkServer/Web/Api/getLessonList.action;jsessionid='+Sessionid,
+                data: {},
+                success: function (data) {                    
+
+                for (var i = 0;i<data.lessonList.length; i++) {
+                    var dd ={
+                        href: "HTML/product/period-list.html?Lessonid="+data.lessonList[i].lessonId,
+                        icon: "icon-shengchengbaogao",
+                        title: "b"
+                    }
+
+
+
+                    var AreTalkLessonBlock = '<div class="Lessonblock" id="List'+data.lessonList[i].lessonId+'" data-url="HTML/product/period-list.html?Lessonid='+data.lessonList[i].lessonId+'" data-icon="icon-shengchengbaogao" onclick="opentab($(this));"><div class="del" onclick="del();">删除</div><span>'+data.lessonList[i].title+'</span></div>';
+
+                      var o = $(AreTalkLessonBlock);
+                      $('#table-lesson').append(o);
+
+                    }
+                  
+                  },
+
+                error: function () {                  
+                  alert(data.errMsg);       
+                  
+                  }
+              });                    
+
+ });
+
+
+
+function del(e) { 
+ alert("aa")
+
+ //阻止事件冒泡
+     var e=arguments.callee.caller.arguments[0]||event; //若省略此句，下面的e改为event，IE运行可以，但是其他浏览器就不兼容
+     if (e && e.stopPropagation) {
+     // this code is for Mozilla and Opera
+     e.stopPropagation();
+     } else if (window.event) {
+     // this code is for IE
+      window.event.cancelBubble = true;
+     }
+}
+
+
+
+
+</script>
+
+
+  </body>
+
+</html>
