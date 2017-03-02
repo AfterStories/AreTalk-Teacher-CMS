@@ -1,5 +1,5 @@
 
-var AjaxURL = "192.168.188.16:8090"
+var AjaxURL = "192.168.1.3:8090"
          function getCookie(c_name) {
             var c_value = document.cookie;
             var c_start = c_value.indexOf(" " + c_name + "=");

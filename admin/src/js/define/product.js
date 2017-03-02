@@ -1,3 +1,38 @@
+ 
+  function GetQueryString(name){
+       var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+       var r = window.location.search.substr(1).match(reg);
+       if(r!=null)return  unescape(r[2]); return null;
+  } 
+  
+     
+        function getCookie(c_name) {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1) {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1) {
+                c_value = null;
+            }
+            else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = c_value.length;
+                }
+                c_value = unescape(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+ 
+
+
+  var Sessionid = getCookie("JSESSIONID")
+  var Lessonid = GetQueryString("Lessonid");
+
+
+
 layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatableHtml5', 'datatablePrint', 'datatableColVis', 'datatableSelect'], function() {
   var $ = layui.jquery,
     layer = layui.layer;
@@ -27,39 +62,11 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
     }
   );
   //datatables配置
-  var AjaxURL = "192.168.188.16:8090"
 
-     
-        function getCookie(c_name) {
-            var c_value = document.cookie;
-            var c_start = c_value.indexOf(" " + c_name + "=");
-            if (c_start == -1) {
-                c_start = c_value.indexOf(c_name + "=");
-            }
-            if (c_start == -1) {
-                c_value = null;
-            }
-            else {
-                c_start = c_value.indexOf("=", c_start) + 1;
-                var c_end = c_value.indexOf(";", c_start);
-                if (c_end == -1) {
-                    c_end = c_value.length;
-                }
-                c_value = unescape(c_value.substring(c_start, c_end));
-            }
-            return c_value;
-        }
- 
-  $(function() {
-    var Sessionid = getCookie("JSESSIONID")
-    var Lessonid = GetQueryString("Lessonid");
               
-            function GetQueryString(name){
-                 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-                 var r = window.location.search.substr(1).match(reg);
-                 if(r!=null)return  unescape(r[2]); return null;
-            } 
-  
+
+  $(function() {
+
 
 
 
@@ -76,7 +83,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
       "searching": true, //是否允许Datatables开启本地搜索
       "paging": true, //是否开启本地分页
-      "lengthChange": true, //是否允许产品改变表格每页显示的记录数
+      "lengthChange": true, //是否允许课程改变表格每页显示的记录数
       "info": true, //控制是否显示表格左下角的信息
       select: {
         style: 'multi'
@@ -135,7 +142,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
                 );
             },
 
-            "sAjaxSource": "http://192.168.188.16:8090/AreTalkServer/Web/Api/GetLessonTime.action;jsessionid="+Sessionid + "?rand=" + Math.random(), //分号贼重要！
+            "sAjaxSource": "http://192.168.1.3:8090/AreTalkServer/Web/Api/GetLessonTime.action;jsessionid="+Sessionid + "?rand=" + Math.random(), //分号贼重要！
 
             "columnDefs": [
      
@@ -273,7 +280,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
      * 选择
      */
     myTable.on('select', function(e, dt, type, index) {
-      console.log('1');
+      console.log(index);
       if(type === 'row') {
         $(myTable.row(index).node()).find('input:checkbox').prop('checked', true);
       }
@@ -311,7 +318,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       //console.log(row);
     })
   });
-  //产品--查看
+  //课程--查看
   $('.btn-showuser').on('click', function() {
     var username = $(this).html();
     var href = 'product-show.html';
@@ -319,13 +326,13 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
     console.log(id);
     layer_show(username, href, id, '800', '600');
   });
-  /*产品-添加*/
+  /*课程-添加*/
   $('#btn-adduser').on('click', function() {
-    var username = $(this).html();
-    var href = 'product-add.html';
+    var username = "添加课节";
+    var href = 'period-add.html';
     layer_show(username, href, '', '800', '600');
   });
-  /*产品--停用*/
+  /*课程--停用*/
   $('.table-sort').on('click', '.handle-btn-stop', function() {
     var obj = $(this);
     var id = obj.parents('tr').attr('data-userid');
@@ -343,7 +350,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       });
     });
   });
-  /*产品--启用*/
+  /*课程--启用*/
   $('.table-sort').on('click', '.handle-btn-run', function() {
     var obj = $(this);
     var id = obj.parents('tr').attr('data-userid');
@@ -361,13 +368,14 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       });
     });
   });
-  /*产品-编辑*/
+  /*课程-编辑*/
   $('.table-sort').on('click', '.handle-btn-edit', function() {
+    
     var obj = $(this);
     var id = obj.parents('tr').attr('data-userid');
-    layer_show('编辑', 'product-edit.html', id, '600', '500');
+    layer_show('编辑课节', 'period-edit.html', id, '600', '500');
   });
-  /*产品-删除*/
+  /*课程-删除*/
   $('.table-sort').on('click', '.handle-btn-delect', function() {
     var obj = $(this);
     var id = obj.parents('tr').attr('data-userid');

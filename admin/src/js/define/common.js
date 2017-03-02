@@ -141,11 +141,14 @@ function layer_show(title, url, id, w, h) {
   layer.open({
     type: 2,
     area: [w + 'px', h + 'px'],
-    fix: false,
+    fix: true,
     maxmin: true,
     shade: false,
     title: title,
-    content: url
+    content: url,
+    success: function(layero, index){
+      
+  }
   });
 };
 /**

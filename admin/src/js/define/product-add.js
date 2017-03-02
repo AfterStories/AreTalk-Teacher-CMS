@@ -1,54 +1,150 @@
+
+  var Lang; var teachLang;var lessonType;
+
 layui.config({
   base: '../../src/js/lib/'
 }).extend({
   zyupload: 'zyupload'
 });
-layui.use(['jquery', 'form', 'upload', 'zyupload'], function() {
+layui.use(['jquery', 'form', 'upload','laydate',"layer"], function() {
   var $ = layui.jquery,
-    form = layui.form();
-  layui.upload({
-    url: '', //上传接口
-    success: function(res) { //上传成功后的回调
-      console.log(res)
-    }
-  });
-  $(function() {
-    // 初始化插件
-    $("#zyupload").zyUpload({
-      itemWidth: "120px", // 文件项的宽度
-      itemHeight: "150px", // 文件项的高度
-      url: "", // 上传文件的路径
-      fileType: ["jpg", "png"], // 上传文件的类型
-      fileSize: 51200000, // 上传文件的大小
-      multiple: true, // 是否可以多个文件上传
-      dragDrop: true, // 是否可以拖动上传文件
-      tailor: false, // 是否可以裁剪图片
-      del: true, // 是否可以删除文件
-      finishDel: true, // 是否在上传文件完成后删除预览
-      /* 外部获得的回调接口 */
-      onSelect: function(selectFiles, allFiles) { // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
-        console.info("当前选择了以下文件：");
-        console.info(selectFiles);
-      },
-      onDelete: function(file, files) { // 删除一个文件的回调方法 file:当前删除的文件  files:删除之后的文件
-        console.info("当前删除了此文件：");
-        console.info(file.name);
-      },
-      onSuccess: function(file, response) { // 文件上传成功的回调方法
-        console.info("此文件上传成功：");
-        console.info(file.name);
-        console.info("此文件上传到服务器地址：");
-        console.info(response);
-      },
-      onFailure: function(file, response) { // 文件上传失败的回调方法
-        console.info("此文件上传失败：");
-        console.info(file.name);
-      },
-      onComplete: function(response) { // 上传完成的回调方法
-        console.info("文件上传完成");
-        console.info(response);
-      }
-    });
+  layedit = layui.layedit,
+  layer = layui.layer,
+  form = layui.form();
 
-  })
-})
+  var laydate = layui.laydate;
+    
+
+
+
+ form.on('select(Lang)', function(data){
+   Lang = data.value;
+});      
+  
+  form.on('select(teachLang)', function(data){
+   teachLang = data.value;
+});
+  form.on('select(lessonType)', function(data){
+   lessonType = data.value;
+});
+
+});
+
+
+   function getCookie(c_name) {
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1) {
+      c_start = c_value.indexOf(c_name + "=");
+  }
+  if (c_start == -1) {
+      c_value = null;
+  }
+  else {
+      c_start = c_value.indexOf("=", c_start) + 1;
+      var c_end = c_value.indexOf(";", c_start);
+      if (c_end == -1) {
+          c_end = c_value.length;
+      }
+      c_value = unescape(c_value.substring(c_start, c_end));
+  }
+  return c_value;
+}
+
+
+
+  
+            var pic1;var pic2;
+           
+
+        
+            var img1 = document.getElementById('img1'),
+                img2 = document.getElementById('img2');
+    
+            var imgData = null;var imgData2 = null;
+            
+            
+
+
+$("#img1").change(function(a){
+var imgFile1 = new FileReader();  
+imgFile1.readAsDataURL(img1.files[0]); 
+
+imgFile1.onload = function() {  
+  imgData = this.result;
+  pic1 = imgData;       
+
+  var pos = imgData.indexOf("4")+2;
+  pic1 = imgData.substring(pos, imgData.length - pos);//去掉Base64:开头的标识字符
+
+
+  }
+});
+                
+$("#img2").change(function(a){
+  var imgFile2 = new FileReader();
+  imgFile2.readAsDataURL(img2.files[0]);
+
+
+
+      imgFile2.onload = function () { 
+       imgData2 = this.result;
+        pic2 = imgData2;          
+
+        var pos2 = imgData2.indexOf("4")+2;
+        pic2 = imgData2.substring(pos2, imgData2.length - pos2);//去掉Base64:开头的标识字符            
+                  
+
+              }; 
+});
+
+   var Sessionid = getCookie("JSESSIONID");
+ function send(){
+
+      
+        var lessontitle = $("#lessontitle").val(),
+            lessonduration = $("#lessonduration").val(),
+            lessonhour = $("#lessonhour").val(),
+            lessonStudents = $("#lessonStudents").val(),
+            startime = $("#startime").val(),
+            endtime = $("#endtime").val(),
+            singleprice = $("#singleprice").val(),
+            sumprice = $("#sumprice").val(),
+            lessontdesc = $("#lessontdesc").val();
+
+
+         $.ajax({
+              dataType:'json',
+              type:'POST', 
+              async:false,                         
+              data:{title:lessontitle,
+                    type:lessonType,
+                    classhour:lessonhour,
+                    duration:lessonduration,
+                    totalStudentCount:lessonStudents,
+                    langId:Lang,
+                    teachLangId:teachLang,
+                    singlePrice:singleprice,
+                    totalPrice:sumprice,
+                    lessonDescribe:lessontdesc,
+                    startTime:startime,
+                    endTime:endtime,
+                    avatarC:pic1,
+                    avatarD:pic2
+                  },       
+              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/addLesson.action;jsessionid='+Sessionid,
+              success:function(data) {
+                          layer.alert('添加课程成功~', {
+                            skin: 'layui-layer-molv' //样式类名
+                            ,closeBtn: 0
+                          }, function(){
+                            parent.layer.closeAll();
+                          });              
+                  },
+              error:function(data,a,b,c) {
+                alert("失败啦，请重试")
+                  }
+              }); 
+
+
+ }; 

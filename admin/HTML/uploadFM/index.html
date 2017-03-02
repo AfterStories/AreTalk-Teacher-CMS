@@ -22,7 +22,7 @@
           function() {
              $.ajax({
                            type : 'POST',
-                             url : "http://192.168.188.20:8080/AreTalkFM/FmAudioKindAction.action",
+                             url : "http://192.168.1.4:8080/AreTalkFM/FmAudioKindAction.action",
                                                       
                            dataType : 'JSON',
                            success : function(data) {
@@ -40,7 +40,7 @@
             //alert("hahahah");
                            $.ajax({
                              type : 'POST',
-                             url : "http://192.168.188.16:8090/AreTalkServer/Api/AreTalk/getLanguage.action",
+                             url : "http://192.168.1.3:8090/AreTalkServer/Api/AreTalk/getLanguage.action",
                             // url : "http://aretalk.ngrok.cc/AreTalkServer/Api/AreTalk/getLanguage.action",                           
                              dataType : 'JSON',
                              success : function(data) {
@@ -375,7 +375,7 @@ if ($('#txt_languageInfoname').val()=="请选择")  {
   	  
   	    imageUpload.addEventListener("error", uploadFailed, false);
   	    imageUpload.addEventListener("abort", uploadCanceled, false);
-  	    imageUpload.open("POST", "http://192.168.188.20:8080/AreTalkFM/Servlet/UploadHandleServlet?sign=2&userId=1014",false);
+  	    imageUpload.open("POST", "http://192.168.1.4:8080/AreTalkFM/Servlet/UploadHandleServlet?sign=2&userId=1014",false);
   	    imageUpload.send(fdimage);
   	    
   	  
@@ -386,11 +386,11 @@ if ($('#txt_languageInfoname').val()=="请选择")  {
      
       xhr.addEventListener("error", uploadFailed, false);
       xhr.addEventListener("abort", uploadCanceled, false);
-      xhr.open("POST", "http://192.168.188.20:8080/AreTalkFM/Servlet/UploadHandleServlet?sign=1&userId=1014");
+      xhr.open("POST", "http://192.168.1.4:8080/AreTalkFM/Servlet/UploadHandleServlet?sign=1&userId=1014");
       xhr.send(fd);
             $.ajax({           
                 type : 'POST',
-                url : "http://192.168.188.20:8080/AreTalkFM/AddAuditFile.action",			                     
+                url : "http://192.168.1.4:8080/AreTalkFM/AddAuditFile.action",			                     
                 dataType : 'JSON',
                 data: {
                    	'filekindId' : filekindId,

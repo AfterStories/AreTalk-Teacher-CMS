@@ -9,7 +9,7 @@ layui.use(['jquery'],function(){
 
 
 
-var LoginURL = "http://192.168.188.16:8090/AreTalkServer/Web/Login/"
+var LoginURL = "http://192.168.1.3:8090/AreTalkServer/Web/Login/"
     
     function Login() {
         var userName = $("#UserName").val();

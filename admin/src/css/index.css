@@ -3649,7 +3649,7 @@ table.dataTable thead .sorting_desc {
   width: 100px; }
 
 .product-add .layui-form-label + .layui-input-block {
-  margin-left: 100px; }
+  margin: 20px 100px; }
 
 .article-sorts .sorts-box .sorts-list {
   width: 200px;

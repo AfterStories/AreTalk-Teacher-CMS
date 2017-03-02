@@ -1758,4 +1758,4 @@ layui.define("jquery", function(exports) {
     }
   })(jQuery);
   exports('zyupload');
-}).addcss('../../css/zyupload.css', 'zyuploadcss');
+}).addcss('../../css/plugin/zyupload.css', 'zyuploadcss');

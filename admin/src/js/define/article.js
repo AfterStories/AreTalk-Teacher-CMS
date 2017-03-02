@@ -42,7 +42,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
         "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
         "searching": true, //是否允许Datatables开启本地搜索
         "paging": true, //是否开启本地分页
-        "lengthChange": true, //是否允许产品改变表格每页显示的记录数
+        "lengthChange": true, //是否允许课程改变表格每页显示的记录数
         "info": true, //控制是否显示表格左下角的信息
         //跟数组下标一样，第一列从0开始，这里表格初始化时，第四列默认降序
         "order": [1, 'desc'], //asc升序   desc降序 

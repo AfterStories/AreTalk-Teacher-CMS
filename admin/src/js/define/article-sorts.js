@@ -4,7 +4,7 @@ layui.use(['tree', 'jquery', 'datatable'], function() {
     $('.table-sort').dataTable({
       "searching": false, //是否允许Datatables开启本地搜索
       "paging": false, //是否开启本地分页
-      "lengthChange": false, //是否允许产品改变表格每页显示的记录数
+      "lengthChange": false, //是否允许课程改变表格每页显示的记录数
       "info": false, //控制是否显示表格左下角的信息
       //跟数组下标一样，第一列从0开始，这里表格初始化时，第四列默认降序
       //"order": [1, 'desc'], //asc升序   desc降序 
