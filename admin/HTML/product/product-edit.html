@@ -42,19 +42,19 @@
         <div class="layui-form-item">
           <label class="layui-form-label">教学用语</label>
           <div class="layui-input-block">
-            <select name="classify" id="Lang"  lay-filter="Lang">
+            <select name="Lang" id="Lang"  lay-filter="Lang">
               <option value="">请选择</option>  
             </select>
           </div>
           <label class="layui-form-label">教授语言</label>
           <div class="layui-input-block">
-            <select name="classify" id="teachLang"  lay-filter="teachLang">
+            <select name="teachLang" id="teachLang"  lay-filter="teachLang">
               <option value="">请选择</option>        
             </select>
           </div> 
           <label class="layui-form-label">课程类型</label>
           <div class="layui-input-block">
-            <select name="classify" id="lessonType"  lay-filter="lessonType">
+            <select name="lessonType" id="lessonType"  lay-filter="lessonType">
               <option value="">请选择</option> 
               <option value="1">小班课</option>
               <option value="2">一对一</option>       
@@ -109,7 +109,7 @@
     <script src="../../js/jquery-1.12.2.min.js"></script>
     <script src="../../src/layui/layui.js"></script>
     <script src="../../src/js/define/common.js"></script>
-    <script src="../../src/js/define/product-edit.js"></script>
+ 
 <script>
    function getCookie(c_name) {
   var c_value = document.cookie;
@@ -130,9 +130,14 @@
   }
   return c_value;
 }
- var Sessionid = getCookie("JSESSIONID");
-var editID = window.parent.editlesId;
+
+ 	var Sessionid = getCookie("JSESSIONID");
+ 	var editID = window.parent.editlesId;
+  
+
   $(function() {
+
+//获取下拉菜单列表
         $.ajax({
                     dataType:'json',
                     type:'GET',
@@ -145,7 +150,8 @@ var editID = window.parent.editlesId;
                            
                            $('#teachLang').append(LangList);                       
                            $('#Lang').append(LangList);
-                            var form = layui.form();
+
+                          var form = layui.form();
                           form.render(); 
                         }
                         },
@@ -156,36 +162,37 @@ var editID = window.parent.editlesId;
               });
 
 
-     
-                $.ajax({
-                    dataType:'json',
-                    type:'GET',
-                    data:{lessonId:editID},       
-                    url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonInfo.action;jsessionid='+Sessionid,
-                    success:function(data) {
-                     alert(data.lessonInfo.title);
-/*                          $("#lessontitle").val(data.lessonInfo.title),
-                          $("#lessonduration").val(data.lessonInfo.duration),
-                          $("#lessonhour").val(data.lessonInfo.classhour),
-                          $("#lessonStudents").val(data.lessonInfo.totalStudentCount),
-                          $("#startime").val(data.lessonInfo.startTime).replace(/T/g, ' '),
-                          $("#endtime").val(data.lessonInfo.endTime).replace(/T/g, ' '),
-                         
-                          $("#lessontdesc").val(data.lessonInfo.lessonDescribe);  */                        
-                       
-                            var form = layui.form();
-                              form.render(); 
-                   
-                        },
-                      error: function () {  
-                        alert(data.errMsg);       
-                  
-                  }                        
-                    }); 
+/* 获取课程原有信息*/    
+        $.ajax({
+            dataType:'json',
+            type:'GET',
+            data:{lessonId:editID},       
+            url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonInfo.action;jsessionid='+Sessionid,
+            success:function(data) {
+        	  		$("#lessontitle").val(data.lessonInfo.title);
+        	  		$("#singleprice").val(data.lessonPrice.singlePrice);
+              		$("#sumprice").val(data.lessonPrice.totalPrice);
+              		$("#lessonduration").val(data.lessonInfo.duration);
+              		$("#lessonhour").val(data.lessonInfo.classhour);
+              		$("#lessonStudents").val(data.lessonInfo.totalStudentCount);
+              		var ST = data.lessonInfo.startTime;var ET = data.lessonInfo.endTime;
+              		ST = ST.replace(/T/g,' ');ET = ET.replace(/T/g,' ');
+              		$("#startime").val(ST);
+              		$("#endtime").val(ET);
+              		$("#lessontdesc").val(data.lessonInfo.lessonDescribe);
+
+              		 },
+              		error: function () {  
+              		  alert(data.errMsg);       
+          
+          }                        
+            }); 
 
 
 });  
 </script>
+
+   <script src="../../src/js/define/product-edit.js"></script>
   </body>
 
 </html>

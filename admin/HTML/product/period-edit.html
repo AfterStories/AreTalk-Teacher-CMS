@@ -12,7 +12,7 @@
 
   <body>
     <div class="pd-20 product-add">
-      <form class="layui-form" action="">
+      <form class="layui-form" >
         <div class="layui-form-item">
           <label class="layui-form-label">课节名称</label>
           <div class="layui-input-block">
@@ -48,7 +48,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label"></label>
           <div class="layui-input-block">
-            <button class="layui-btn" id="btn-newLesson" onclick="send();">提交</button>
+            <div class="layui-btn" id="btn-editLesson" onclick="send();">提交</div>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
           </div>
         </div>
@@ -67,14 +67,14 @@
                     data:{lessonId:Lessonid},       
                     url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getClassHour.action;jsessionid='+Sessionid,
                     success:function(data) {
-                      for (var i = 0;i<data.classHour.length; i++) {
+                          for (var i = 0;i<data.classHour.length; i++) {
                            var kejieNoList = '<option value="'+data.classHour[i]+'">'+data.classHour[i]+'</option>';                           
                            $('#kejieNo').append(kejieNoList);                           
                               var form = layui.form();
                               form.render();
                             }
                         },
-                      error: function () {                  
+                    error: function () {                  
                         alert(data.errMsg);       
                   
                   }                        
@@ -83,34 +83,31 @@
 /*
 获取其他值
 */
-
-
-
-                $.ajax({
-                    dataType:'json',
-                    type:'GET',
-                    data:{lessonId:editID},       
-                    url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonInfo.action;jsessionid='+Sessionid,
-                    success:function(data) {
-                     alert(data.lessonInfo.title);
-/*                          $("#lessontitle").val(data.lessonInfo.title),
-                          $("#lessonduration").val(data.lessonInfo.duration),
-                          $("#lessonhour").val(data.lessonInfo.classhour),
-                          $("#lessonStudents").val(data.lessonInfo.totalStudentCount),
-                          $("#startime").val(data.lessonInfo.startTime).replace(/T/g, ' '),
-                          $("#endtime").val(data.lessonInfo.endTime).replace(/T/g, ' '),
-                         
-                          $("#lessontdesc").val(data.lessonInfo.lessonDescribe);  */                        
-                       
-                            var form = layui.form();
-                              form.render(); 
+var clasNo = window.parent.ClassNoId;
+          $.ajax({
+              dataType:'json',
+              type:'GET',
+              data:{lessonId:Lessonid,classNo:clasNo},       
+              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonClassInfo.action;jsessionid='+Sessionid,
+              success:function(data) {
+              
+                    $("#kejietitle").val(data.lessonInfo.title);                  
+                  var ST = data.lessonInfo.startTime;var ET = data.lessonInfo.endTime;
+                  ST = ST.replace(/T/g,' ');ET = ET.replace(/T/g,' ');
+                  $("#kejiestartime").val(ST);
+                  $("#kejieendtime").val(ET);
                    
-                        },
-                      error: function () {  
-                        alert(data.errMsg);       
-                  
-                  }                        
-                    }); 
+                    $("#kejiedesc").val(data.lessonInfo.lessonDescribe);                          
+                 
+                      var form = layui.form();
+                        form.render(); 
+             
+                  },
+                error: function () {  
+                  alert(data.errMsg);       
+            
+            }                        
+              }); 
 
 
 });  

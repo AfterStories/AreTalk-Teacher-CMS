@@ -11,12 +11,13 @@ layui.use(['jquery'],function(){
 
 var LoginURL = "http://192.168.1.3:8090/AreTalkServer/Web/Login/"
     
+
     function Login() {
         var userName = $("#UserName").val();
 
         var password = hex_md5($("#Password").val());
-		
-   	if (!userName || !password) {
+        
+    if (!userName || !password) {
             alert('请输入您的用户名与密码。');
             return false;
         }else{
@@ -26,36 +27,44 @@ var LoginURL = "http://192.168.1.3:8090/AreTalkServer/Web/Login/"
                     url: LoginURL+"login.action?userName="+userName+"&password="+password,
                     data: {},
                     success: function (data) {                    
-                    	alert("登录成功！")
+                        alert("登录成功！")
 
                         CreateCookie(userName, password, 30);
                         CreateCookie("JSESSIONID", data.JSESSIONID, 30);
-
+                        if(data.login=="success"){
+                            location.href="../index.html?LoginedName="+userName;
+                            var isLogin = true;
+                        }else{
+                            alert("data.errMsg")                        }
                         
-                    	location.href="../index.html?LoginedName="+userName;
-
-
-                         
-
-            
-                    	var isLogin = true;
                       
-                    	},
+                        },
 
                     error: function () {
-                    	
-						alert(data.errMsg);
-						
-                    	
-                    	}
-                	});
+                        
+                        alert(data.errMsg);
+                        
+                        
+                        }
+                    });
             }                 
 
     }
-
+ 
+    function getSessionId(){  
+                var c_name = 'JSESSIONID';  
+                if(document.cookie.length>0){  
+                   c_start=document.cookie.indexOf(c_name + "=")  
+                   if(c_start!=-1){   
+                     c_start=c_start + c_name.length+1   
+                     c_end=document.cookie.indexOf(";",c_start)  
+                     if(c_end==-1) c_end=document.cookie.length  
+                     return unescape(document.cookie.substring(c_start,c_end));  
+                   }  
+                }  
+            }  
 
  
-
 
         function Logout() {
 

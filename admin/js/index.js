@@ -64,13 +64,33 @@ $('.larry-side-menu').click(function() {
 
             
             var LoginedName = GetQueryString("LoginedName");
+            var PASW = getCookie(LoginedName);
             function GetQueryString(name){
                  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
                  var r = window.location.search.substr(1).match(reg);
                  if(r!=null)return  unescape(r[2]); return null;
             } 
-            
-             
+    function getCookie(c_name) {
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1) {
+      c_start = c_value.indexOf(c_name + "=");
+  }
+  if (c_start == -1) {
+      c_value = null;
+  }
+  else {
+      c_start = c_value.indexOf("=", c_start) + 1;
+      var c_end = c_value.indexOf(";", c_start);
+      if (c_end == -1) {
+          c_end = c_value.length;
+      }
+      c_value = unescape(c_value.substring(c_start, c_end));
+  }
+  return c_value;
+}
+           
+ var Sessionid = getCookie("JSESSIONID");            
 $(function(){
 
 
@@ -154,7 +174,41 @@ $(function(){
             unlockSystem();
         }
     });
-    
+
+function CreateCookie(name, value, days) {
+    if (days) {
+        var date = new Date;
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1E3);
+        var expires = "; expires=" + date.toGMTString()
+    } else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/"
+
+}
+function deleteCookie(cname) {
+            CreateCookie(cname, "", -1);
+            document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+   $('#exit').click(function(){
+
+      $.ajax({
+         type: "POST",
+         url: 'http://192.168.1.3:8090/AreTalkServer/Web/Login/logout.action;jsessionid='+Sessionid,
+         data: {},
+         success: function (data) {
+          deleteCookie("JSESSIONID");
+          deleteCookie(LoginedName);
+           alert("已退出")
+           location.href="HTML/login.html";
+            var isLogin = false;},
+           error: function () {
+           lert(data.errMsg);
+           }
+       });
+
+  });
+
+
+
 });
 
 

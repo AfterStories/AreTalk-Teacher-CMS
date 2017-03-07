@@ -1,3 +1,41 @@
+  var Sessionid = getCookie("JSESSIONID")
+  var Lessonid = GetQueryString("Lessonid");
+
+
+
+var dataSet =[];var countryArry =[];
+
+  function GetQueryString(name){
+       var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+       var r = window.location.search.substr(1).match(reg);
+       if(r!=null)return  unescape(r[2]); return null;
+  } 
+  
+     
+        function getCookie(c_name) {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1) {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1) {
+                c_value = null;
+            }
+            else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = c_value.length;
+                }
+                c_value = unescape(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+ 
+
+
+
+
 //初始化
 layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatableHtml5', 'datatablePrint', 'datatableColVis', 'datatableSelect'], function() {
   var $ = layui.jquery,
@@ -27,7 +65,71 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       return null;
     }
   );
+function getcountry(){
+    $.ajax({
+          dataType:'json',
+          type:'GET',
+          async:false, 
+          data:{},       
+          url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getCommonTable.action;jsessionid='+Sessionid,
+          success:function(data) {
+          for (var i = 0;i<data.country.length; i++) {               
+                var countryId = data.country[i].id;
+                countryArry[countryId] = {
+                  countryNameCn:data.country[i].countryNameCn,
+                  countryNameEn:data.country[i].countryNameEn,
+                  countryNameSelf:data.country[i].countryNameSelf
+                }
+          }    console.log(countryArry)              
+              },
+          error:function() {
+                alert("失败，请重试");
+              }    
+          });
+};
   $(document).ready(function() {
+
+
+getuserinfo();
+
+function getuserinfo(){
+getcountry();
+    $.ajax({
+          dataType:'json',
+          type:'GET',
+          async:false, 
+          data:{},       
+          url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getStudentInfo.action;jsessionid='+Sessionid,
+          success:function(data) {
+                  
+                
+                  for (var i = 0;i<data.data.userInfoList.length; i++) {                        
+                        var ID = data.data.userInfoList[i].userInfo.id;
+                        var name = data.data.userInfoList[i].userInfo.name;
+                        var sex = data.data.userInfoList[i].userInfo.sex;
+                        if(sex==1){sex = "男"}else if(sex==0){sex ="女"}else{sex = "其他"};
+                        var nickname = data.data.userInfoList[i].userInfo.nickname;
+                        var headimg = '<img style="width:100px;height:100px;" src=http://192.168.1.3:8090'+data.data.userInfoList[i].avatar+'>';
+                        var countryNO = data.data.userInfoList[i].userInfo.countryId;
+
+                  
+                        var country = countryArry[countryNO].countryNameCn;
+                        var lesson = data.data.userInfoList[i].lessonTitle;
+                        var buyClassNo = data.data.userInfoList[i].buyClassNo;
+                        var cost = data.data.userInfoList[i].cost;
+               
+                        var dataSetA= [];
+                        dataSetA.push(ID,name,sex,nickname,headimg,country,lesson,buyClassNo,cost);
+                        dataSet.push(dataSetA);
+                   }    
+              },
+          error:function() {
+                alert("失败，请重试");
+              }    
+          }); 
+
+}; 
+
     var myTable = $('#userTable').DataTable({
       "processing": true, //DataTables载入数据时，是否显示‘进度’提示  
       "stateSave": true, //是否打开客户端状态记录功能,此功能在ajax刷新纪录的时候不会将个性化设定回复为初始化状态  
@@ -39,87 +141,30 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
       "searching": true, //是否允许Datatables开启本地搜索
       "paging": true, //是否开启本地分页
-      "lengthChange": true, //是否允许课程改变表格每页显示的记录数
+      "lengthChange": true, //是否允许产品改变表格每页显示的记录数
       "info": true, //控制是否显示表格左下角的信息
       //跟数组下标一样，第一列从0开始，这里表格初始化时，第四列默认降序
       "order": [1, 'desc'], //asc升序   desc降序 
       "aoColumnDefs": [{
         "orderable": false,
-        "aTargets": [0, 10] // 指定列不参与排序
+     
       }],
       "deferRender": true, //延迟渲染
-      "ajax": "../../../json/user.json", //数据的路径
+      //"ajax": "user.json", 数据的路径
+      "data":dataSet,
       select: { //单击tr选中当前行
         style: 'multi'
       },
-      "columns": [{ //定义列
-        "data": function(obj) {
-          return '<input type="checkbox" class="fly-checkbox" name="sublist" data-id=' + obj.id + '>';
-        },
-        "sTitle": "<input type='checkbox' class='btn-checkall fly-checkbox'>", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "id",
-        "sTitle": "ID", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": function(obj) {
-          return '<u class="btn-showuser">' + obj.userName + '</u>';
-        },
-        "sTitle": "用户名", //标题
-        "sType": 'chinese',
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "userSex",
-        "sTitle": "性别", //标题
-        "sType": 'chinese',
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "phone",
-        "sTitle": "手机号码", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "identity",
-        "sTitle": "身份证号码", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "email",
-        "sTitle": "邮箱", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": "address",
-        "sTitle": "地址", //标题
-        "sType": 'chinese',
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": function(obj) {
-          return replaceTime(obj.joinTime / 1000);
-        },
-        "sTitle": "加入时间", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": function(obj) {
-          if(obj.status) {
-            return '<span class="label label-success radius">已启用</span>';
-          } else {
-            return '<span class="label label-default radius">已停用</span>';
-          }
-        },
-        "className": "td-status",
-        "sTitle": "状态", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }, {
-        "data": function(obj) {
-          if(obj.status) {
-            return '<span title="停用" class="handle-btn handle-btn-stop"><i class="linyer icon-zanting"></i></span><span title="编辑" class="handle-btn handle-btn-edit"><i class="linyer icon-edit"></i></span><span title="修改密码" class="handle-btn handle-btn-updatepwd"><i class="linyer icon-xgpwd2"></i></span><span title="删除" class="handle-btn handle-btn-delect"><i class="linyer icon-delect"></i></span>';
-          } else {
-            return '<span title="启用" class="handle-btn handle-btn-run"><i class="linyer icon-qiyong"></i></span><span title="编辑" class="handle-btn handle-btn-edit"><i class="linyer icon-edit"></i></span><span title="修改密码" class="handle-btn handle-btn-updatepwd"><i class="linyer icon-xgpwd2"></i></span><span title="删除" class="handle-btn handle-btn-delect"><i class="linyer icon-delect"></i></span>';
-          }
-        },
-        "className": "td-handle",
-        "sTitle": "操作", //标题
-        "sDefaultContent": "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-      }]
+      "columns": 
+      [{"title":"学生ID"},
+      {"title":"姓名"},
+      {"title":"性别"},
+      {"title":"昵称"},
+      {"title":"头像"},
+      {"title":"国家"},
+      {"title":"购买课程"},
+      {"title":"购买课节"},
+      {"title":"消费总金"}]
     });
     /**
      * 添加falsh
@@ -156,10 +201,10 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
         "text": "<i class='linyer icon-print'></i> <span class='hidden'>打印</span>",
         "className": "layui-btn table-tool",
         autoPrint: false,
-        message: '此打印是使用DataTable的打印按钮生成的!'
+        message: '学生列表'
       }]
     });
-    console.log(myTable);
+ 
     myTable.buttons().container().appendTo($('.tableTools'));
     /**
      * 显示隐藏列

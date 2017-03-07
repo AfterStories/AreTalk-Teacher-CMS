@@ -92,7 +92,7 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
                       alert("提交成功");           
                   },
               error:function(data,a,b,c) {
-                alert("失败，请重试")
+                    alert("失败，请重试")
                   }    
               }); 
 

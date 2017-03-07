@@ -54,14 +54,14 @@ layui.use(['jquery', 'form', 'upload','laydate',"layer"], function() {
 
 
   
-            var pic1;var pic2;
-           
+    var pic1;var pic2;
+   
 
-        
-            var img1 = document.getElementById('img1'),
-                img2 = document.getElementById('img2');
-    
-            var imgData = null;var imgData2 = null;
+
+    var img1 = document.getElementById('img1'),
+        img2 = document.getElementById('img2');
+
+    var imgData = null;var imgData2 = null;
             
             
 

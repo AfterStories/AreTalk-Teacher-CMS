@@ -1,4 +1,5 @@
- 
+  
+
   function GetQueryString(name){
        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
        var r = window.location.search.substr(1).match(reg);
@@ -28,9 +29,9 @@
  
 
 
-  var Sessionid = getCookie("JSESSIONID")
+  var Sessionid = getCookie("JSESSIONID");
   var Lessonid = GetQueryString("Lessonid");
-
+var myTable
 
 
 layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatableHtml5', 'datatablePrint', 'datatableColVis', 'datatableSelect'], function() {
@@ -70,7 +71,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
 
 
 
-     var myTable = $('#productTable').DataTable({
+     myTable = $('#productTable').DataTable({
           
       "searching" : false,
       "bProcessing" : true,
@@ -166,14 +167,16 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
                 "targets": [2],
                 "data": "startTime",
                 "render": function(data, type, full) {
-                    return data;
+                    var ST = data.replace(/T/g,' ');
+                    return ST;
                 }
             },
             {
                 "targets": [3],
                 "data": "endTime",
                 "render": function(data, type, full) {
-                    return data;
+                  var ET = data.replace(/T/g,' ');
+                    return ET;
                 }
             },
             {
@@ -194,22 +197,39 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
                 "targets": [6],
                 "data": "realStartTime",
                 "render": function (data, type, full) {
-                    return data;
+                  if(data!==null){
+                    var rST 
+                    rST = data.replace(/T/g,' ');
+                     return rST;
+                  }else{
+                  var Stips = "尚未开课"                    
+                    return Stips;
+                  }
+                  
+                   
                 }
             },
             {
                 "targets": [7],
                 "data": "realEndTime",
                 "render": function (data, type, full) {
-                    return data;
+                  if(data!==null){
+                    var rET 
+                    rET = data.replace(/T/g,' ');
+                    return rET;
+                  }else{
+                  var Etips = "尚未结课"                    
+                    return Etips;
+                  }
+                    
                 }
             },
             {
                 "targets": [8],
-                "data": "",
+                "data": "classNo",
                 "orderable": false,
-                "render": function(data, type, full) {
-                    var s = '<span title="编辑" class="handle-btn handle-btn-edit" style="margin-right:14px;"><i class="linyer icon-edit"></i></span><span title="删除" class="handle-btn handle-btn-delect"><i class="linyer icon-delect"></i></span>';
+                "render": function(data, type, row,full) {
+                    var s = '<span title="编辑" class="handle-btn handle-btn-edit" style="margin-right:14px;"><i class="linyer icon-edit" onclick="edit('+data+')";></i></span><span title="删除" class="handle-btn handle-btn-delect"><i class="linyer icon-delect"></i></span>';
                     return s;
                 },
                 "className": "td-handle"
@@ -368,13 +388,7 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
       });
     });
   });
-  /*课程-编辑*/
-  $('.table-sort').on('click', '.handle-btn-edit', function() {
-    
-    var obj = $(this);
-    var id = obj.parents('tr').attr('data-userid');
-    layer_show('编辑课节', 'period-edit.html', id, '600', '500');
-  });
+
   /*课程-删除*/
   $('.table-sort').on('click', '.handle-btn-delect', function() {
     var obj = $(this);

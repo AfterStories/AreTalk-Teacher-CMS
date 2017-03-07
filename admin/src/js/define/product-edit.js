@@ -17,14 +17,14 @@ layui.use(['jquery', 'form', 'upload','laydate',"layer"], function() {
 
 
 
- form.on('select(Lang)', function(data){
+form.on('select(Lang)', function(data){
    Lang = data.value;
 });      
   
-  form.on('select(teachLang)', function(data){
+form.on('select(teachLang)', function(data){
    teachLang = data.value;
 });
-  form.on('select(lessonType)', function(data){
+form.on('select(lessonType)', function(data){
    lessonType = data.value;
 });
 
@@ -94,9 +94,9 @@ $("#img2").change(function(a){
               }; 
 });
 
-
+var Sessionid = getCookie("JSESSIONID");
  function send(){
- 
+alert(Sessionid);
         var lessontitle = $("#lessontitle").val(),
             lessonduration = $("#lessonduration").val(),
             lessonhour = $("#lessonhour").val(),
@@ -107,12 +107,12 @@ $("#img2").change(function(a){
             sumprice = $("#sumprice").val(),
             lessontdesc = $("#lessontdesc").val();
 
-
-/*         $.ajax({
+         $.ajax({
               dataType:'json',
               type:'POST', 
               async:false,                         
-              data:{title:lessontitle,
+              data:{lessonId:editID,
+                    title:lessontitle,
                     type:lessonType,
                     classhour:lessonhour,
                     duration:lessonduration,
@@ -127,8 +127,9 @@ $("#img2").change(function(a){
                     avatarC:pic1,
                     avatarD:pic2
                   },       
-              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonInfo.action?jsessionid='+Sessionid,
+              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonInfo.action;jsessionid='+Sessionid,
               success:function(data) {
+
                           layer.alert('修改课程成功~', {
                             skin: 'layui-layer-molv' //样式类名
                             ,closeBtn: 0
@@ -137,9 +138,9 @@ $("#img2").change(function(a){
                           });              
                   },
               error:function(data,a,b,c) {
-                alert("失败啦，请重试")
+                    alert(data.errMsg)
                   }
-              }); */
+              }); 
 
 
 

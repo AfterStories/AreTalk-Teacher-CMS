@@ -5,9 +5,10 @@ layui.config({
   zyupload: 'zyupload'
 });
 
-layui.use(['jquery', 'form', 'upload','laydate'], function() {
+layui.use(['jquery', 'form', 'upload','laydate','layer'], function() {
   var $ = layui.jquery,
   layedit = layui.layedit,
+    layer = layui.layer,
   form = layui.form();
 
   var laydate = layui.laydate;
@@ -16,10 +17,6 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
  form.on('select(kejieNO)', function(data){
    kejieNO = data.value;
 });  
-
-
-
-
 
 
 
@@ -52,15 +49,12 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
   var Sessionid = getCookie("JSESSIONID");
   var Lessonid= window.parent.Lessonid;
 
- 
-
-
-
       function send(){
 
         $.ajax({
               dataType:'json',
-              type:'POST',
+              type:'GET',
+              async:false,//异步关掉才好使~！
               data:{title:$("#kejietitle").val(),
                     lessonId:Lessonid,
                     classNo:kejieNO,
@@ -68,11 +62,20 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
                     startTime:$("#kejiestartime").val(),
                     endTime:$("#kejieendtime").val()
                   },       
-              url: 'http://192.168.188.16:8090/AreTalkServer/Web/Api/editLessonClassInfo.action;jsessionid='+Sessionid,
+              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonClassInfo.action;jsessionid='+Sessionid,
               success:function(data) {
-                      alert("提交成功");           
+                          layer.alert('修改成功~', {
+                            skin: 'layui-layer-molv' //样式类名
+                            ,closeBtn: 0
+                          }, function(){
+                            parent.layer.closeAll();
+                          });  
+                                     
+                  },
+              error:function(data,a,b,c) {
+                alert("失败啦，请重试")
                   }
-              }); 
+                        });
 
   }; 
  

@@ -66,16 +66,66 @@
           </tr>
         </tfoot>
       </table>
-   
-    </div>
+   <div id="editLessonAD">
+     编辑课程详情
+   </div>
+         <iframe src="" frameborder="0" id="reedit" style="width:1054px;height:600px;overflow-x:hidden;overflow-y:hidden;margin-top:60px;"></iframe>
+
+  </div>
+  <style>
+    #editLessonAD{
+      font-size: 26px;
+      margin-top: 60px;
+    }
+  </style>
 <script src="../../js/jquery-1.12.2.min.js"></script>
+<script src="../../src/layui/layui.js"></script>
+<script src="../../src/js/define/product.js"></script>
+<script src="../../src/js/define/common.js"></script>
+<script src="../../js/login.js"></script>
+<script>
+  var ClassNoId ;
+function edit(ClsNo) {
+     ClassNoId = ClsNo;
 
-  
-    <script src="../../src/layui/layui.js"></script>
-      <script src="../../src/js/define/product.js"></script>
-    <script src="../../src/js/define/common.js"></script>
-    <script src="../../js/login.js"></script>
+    layer_show('编辑课节', "period-edit.html", ClassNoId, '600', '500');
+  };
 
+    $(function() {
+    var Lessonid = GetQueryString("Lessonid");
+      var reeditSRC = 'http://192.168.1.3:8090/AreTalkServer/resource/ueditor/reedit.html?lessonId='+Lessonid;
+      $('#reedit').attr("src",reeditSRC);
+
+
+
+/*   setInterval(setIframeHeight("reedit"), 100);
+function setIframeHeight(id){
+  try{
+    var iframe = document.getElementById(id);
+    if(iframe.attachEvent){
+      iframe.attachEvent("onload", function(){
+        iframe.height =  iframe.contentWindow.document.documentElement.scrollHeight;
+      });
+      return;
+    }else{
+      iframe.onload = function(){
+        iframe.height = iframe.contentDocument.body.scrollHeight;
+      };
+      return;        
+    }  
+  }catch(e){
+    throw new Error('setIframeHeight Error');
+  }
+}*/
+
+
+
+
+
+
+    })
+    
+</script>
 
   </body>
 
