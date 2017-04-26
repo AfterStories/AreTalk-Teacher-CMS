@@ -192,7 +192,7 @@ function deleteCookie(cname) {
 
       $.ajax({
          type: "POST",
-         url: 'http://192.168.1.3:8090/AreTalkServer/Web/Login/logout.action;jsessionid='+Sessionid,
+         url: 'http://211.159.152.210:8188/AreTalkServer/Web/Login/logout.action;jsessionid='+Sessionid,
          data: {},
          success: function (data) {
           deleteCookie("JSESSIONID");

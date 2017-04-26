@@ -9,7 +9,7 @@ layui.use(['jquery'],function(){
 
 
 
-var LoginURL = "http://192.168.1.3:8090/AreTalkServer/Web/Login/"
+var LoginURL = "http://211.159.152.210:8188/AreTalkServer/Web/Login/"
     
 
     function Login() {
@@ -24,25 +24,27 @@ var LoginURL = "http://192.168.1.3:8090/AreTalkServer/Web/Login/"
             
                 $.ajax({
                     type: "POST",
-                    url: LoginURL+"login.action?userName="+userName+"&password="+password,
+                    url: LoginURL+"login.action?userName="+userName+"&password="+password+"&userType=0",
                     data: {},
                     success: function (data) {                    
-                        alert("登录成功！")
+                        
 
                         CreateCookie(userName, password, 30);
-                        CreateCookie("JSESSIONID", data.JSESSIONID, 30);
-                        if(data.login=="success"){
+                        CreateCookie("JSESSIONID", data.data.JSESSIONID, 30);
+                        if(data.data.status=="success"){
+                            alert("登录成功！");
                             location.href="../index.html?LoginedName="+userName;
                             var isLogin = true;
                         }else{
-                            alert("data.errMsg")                        }
+                            alert("失败，密码错误！");
+                             }
                         
                       
                         },
 
                     error: function () {
                         
-                        alert(data.errMsg);
+                        alert("网络连接超时");
                         
                         
                         }

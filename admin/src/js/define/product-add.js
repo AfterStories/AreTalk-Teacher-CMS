@@ -132,7 +132,7 @@ $("#img2").change(function(a){
                     avatarC:pic1,
                     avatarD:pic2
                   },       
-              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/addLesson.action;jsessionid='+Sessionid,
+              url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/addLesson.action;jsessionid='+Sessionid,
               success:function(data) {
                           layer.alert('添加课程成功~', {
                             skin: 'layui-layer-molv' //样式类名

@@ -53,8 +53,9 @@ layui.use(['jquery', 'form', 'upload','laydate','layer'], function() {
 
         $.ajax({
               dataType:'json',
-              type:'GET',
+              type:'POST',
               async:false,//异步关掉才好使~！
+              contentType: "application/x-www-form-urlencoded; charset=utf-8", 
               data:{title:$("#kejietitle").val(),
                     lessonId:Lessonid,
                     classNo:kejieNO,
@@ -62,7 +63,7 @@ layui.use(['jquery', 'form', 'upload','laydate','layer'], function() {
                     startTime:$("#kejiestartime").val(),
                     endTime:$("#kejieendtime").val()
                   },       
-              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/editLessonClassInfo.action;jsessionid='+Sessionid,
+              url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/editLessonClassInfo.action;jsessionid='+Sessionid,
               success:function(data) {
                           layer.alert('修改成功~', {
                             skin: 'layui-layer-molv' //样式类名

@@ -21,7 +21,7 @@
 			<span>个人信息</span>
 		</header><!-- /header -->
 		<div class="larry-personal-body clearfix">
-			<form class="layui-form col-lg-5" action="" method="post">
+			<form class="layui-form col-lg-5" >
 				<div class="layui-form-item">
 					<label class="layui-form-label">用户名</label>
 					<div class="layui-input-block">  
@@ -60,7 +60,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">界面语言</label>
+					<label class="layui-form-label">教授语言</label>
 					<div class="layui-input-block">
 						<select name="interest" lay-filter="aihao">
 							<option value=""></option>
@@ -71,35 +71,74 @@
 				</div>
 
 				<div class="layui-form-item layui-form-text">
-					<label class="layui-form-label">座右铭</label>
+					<label class="layui-form-label">个人介绍</label>
 					<div class="layui-input-block">
-						<textarea placeholder="既然选择了远方，便只顾风雨兼程；路漫漫其修远兮，吾将上下而求索" value="" class="layui-textarea"></textarea>
+						<textarea value="" id="personinfo" class="layui-textarea"></textarea>
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						<div class="layui-btn"  onclick="send();">立即提交</div>
+						
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
 </section>
+<script src="../js/jquery-1.12.2.min.js"></script>
 <script type="text/javascript" src="../../common/layui/layui.js"></script>
 <script type="text/javascript">
-	layui.use(['form','upload'],function(){
+	layui.use(['form','upload','jquery'],function(){
          var form = layui.form();
-         layui.upload({ 
-             url: '' ,//上传接口 
-             success: function(res){
-              //上传成功后的回调 
-              console.log(res) 
-            } 
-         });
-
+         var $ = layui.jquery;
 	});
+
+
+function getCookie(c_name) {
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1) {
+      c_start = c_value.indexOf(c_name + "=");
+  }
+  if (c_start == -1) {
+      c_value = null;
+  }
+  else {
+      c_start = c_value.indexOf("=", c_start) + 1;
+      var c_end = c_value.indexOf(";", c_start);
+      if (c_end == -1) {
+          c_end = c_value.length;
+      }
+      c_value = unescape(c_value.substring(c_start, c_end));
+  }
+  return c_value;
+}
+
+
+var Sessionid = getCookie("JSESSIONID");
+
+ function send(){
+            var lessontdesc = $("#personinfo").val();
+         $.ajax({
+              dataType:'json',
+              type:'POST', 
+              async:false,                         
+              data:{
+					comment:lessontdesc
+                  },       
+              url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/editTeacherComment.action;jsessionid='+Sessionid,
+              success:function(data) {
+					alert("成功")              
+                  },
+              error:function() {
+                    alert(data.errMsg)
+                  }
+              }); 
+
+
+ }; 
 </script>
 </body>
 </html>

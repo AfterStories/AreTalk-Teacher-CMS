@@ -71,14 +71,14 @@ function getcountry(){
           type:'GET',
           async:false, 
           data:{},       
-          url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getCommonTable.action;jsessionid='+Sessionid,
+          url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/getCommonTable.action;jsessionid='+Sessionid,
           success:function(data) {
-          for (var i = 0;i<data.country.length; i++) {               
-                var countryId = data.country[i].id;
+          for (var i = 0;i<data.data.country.length; i++) {               
+                var countryId = data.data.country[i].id;
                 countryArry[countryId] = {
-                  countryNameCn:data.country[i].countryNameCn,
-                  countryNameEn:data.country[i].countryNameEn,
-                  countryNameSelf:data.country[i].countryNameSelf
+                  countryNameCn:data.data.country[i].countryNameCn,
+                  countryNameEn:data.data.country[i].countryNameEn,
+                  countryNameSelf:data.data.country[i].countryNameSelf
                 }
           }    console.log(countryArry)              
               },
@@ -99,24 +99,24 @@ getcountry();
           type:'GET',
           async:false, 
           data:{},       
-          url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getStudentInfo.action;jsessionid='+Sessionid,
+          url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/getStudentInfo.action;jsessionid='+Sessionid,
           success:function(data) {
                   
                 
-                  for (var i = 0;i<data.data.userInfoList.length; i++) {                        
-                        var ID = data.data.userInfoList[i].userInfo.id;
-                        var name = data.data.userInfoList[i].userInfo.name;
-                        var sex = data.data.userInfoList[i].userInfo.sex;
+                  for (var i = 0;i<data.data.data.userInfoList.length; i++) {                        
+                        var ID = data.data.data.userInfoList[i].userInfo.id;
+                        var name = data.data.data.userInfoList[i].userInfo.name;
+                        var sex = data.data.data.userInfoList[i].userInfo.sex;
                         if(sex==1){sex = "男"}else if(sex==0){sex ="女"}else{sex = "其他"};
-                        var nickname = data.data.userInfoList[i].userInfo.nickname;
-                        var headimg = '<img style="width:100px;height:100px;" src=http://192.168.1.3:8090'+data.data.userInfoList[i].avatar+'>';
-                        var countryNO = data.data.userInfoList[i].userInfo.countryId;
+                        var nickname = data.data.data.userInfoList[i].userInfo.nickname;
+                        var headimg = '<img style="width:100px;height:100px;" src=http://211.159.152.210:8188'+data.data.data.userInfoList[i].avatar+'>';
+                        var countryNO = data.data.data.userInfoList[i].userInfo.countryId;
 
                   
                         var country = countryArry[countryNO].countryNameCn;
-                        var lesson = data.data.userInfoList[i].lessonTitle;
-                        var buyClassNo = data.data.userInfoList[i].buyClassNo;
-                        var cost = data.data.userInfoList[i].cost;
+                        var lesson = data.data.data.userInfoList[i].lessonTitle;
+                        var buyClassNo =data.data.data.userInfoList[i].buyClassNo;
+                        var cost = data.data.data.userInfoList[i].cost;
                
                         var dataSetA= [];
                         dataSetA.push(ID,name,sex,nickname,headimg,country,lesson,buyClassNo,cost);

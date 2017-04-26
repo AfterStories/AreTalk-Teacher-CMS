@@ -52,10 +52,10 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
                     dataType:'json',
                     type:'GET',
                     data:{lessonId:Lessonid},       
-                    url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/getClassHour.action;jsessionid='+Sessionid,
+                    url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/getClassHour.action;jsessionid='+Sessionid,
                     success:function(data) {
-                      for (var i = 0;i<data.classHour.length; i++) {
-                           var kejieNoList = '<option value="'+data.classHour[i]+'">'+data.classHour[i]+'</option>';
+                      for (var i = 0;i<data.data.classHour.length; i++) {
+                           var kejieNoList = '<option value="'+data.data.classHour[i]+'">'+data.data.classHour[i]+'</option>';
                            
                            $('#kejieNo').append(kejieNoList);                           
                               var form = layui.form();
@@ -87,7 +87,7 @@ layui.use(['jquery', 'form', 'upload','laydate'], function() {
                     startTime:$("#kejiestartime").val(),
                     endTime:$("#kejieendtime").val()
                   },       
-              url: 'http://192.168.1.3:8090/AreTalkServer/Web/Api/addLessonDetailClass.action;jsessionid='+Sessionid,
+              url: 'http://211.159.152.210:8188/AreTalkServer/Web/Api/addLessonDetailClass.action;jsessionid='+Sessionid,
               success:function(data) {
                       alert("提交成功");           
                   },

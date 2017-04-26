@@ -37,6 +37,8 @@ var myTable
 layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatableHtml5', 'datatablePrint', 'datatableColVis', 'datatableSelect'], function() {
   var $ = layui.jquery,
     layer = layui.layer;
+
+
   // oSort是排序类型数组, 'chinese-asc'是自己定义的类型的排序(*-asc || *-desc)名称
   // 插件应该会根据表格中的内容的类型(string, number, chinese)进行比较排序，
   // 如果以chinese类型来排序则用oSort['chinese-asc']和oSort['chinese-desc']的方法
@@ -73,9 +75,11 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
 
      myTable = $('#productTable').DataTable({
           
-      "searching" : false,
-      "bProcessing" : true,
-      "bServerSide" : true,
+      "searching" : false,//搜索
+      "bSort":true,
+      "aaSorting": [[ 1, "asc" ]],//默认第几个排序,标示asc(升序)或desc(降序)
+      "bProcessing" : true,//载入中
+      "bServerSide" : true,//服务端模式
       "processing": true, //DataTables载入数据时，是否显示‘进度’提示  
       "stateSave": true, //是否打开客户端状态记录功能,此功能在ajax刷新纪录的时候不会将个性化设定回复为初始化状态  
       "scrollCollapse": true, //是否开启DataTables的高度自适应，当数据条数不够分页数据条数的时候，插件高度是否随数据条数而改变  
@@ -120,18 +124,17 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
             });
           },
 
-            "fnDrawCallback": function( oSettings ) {  
+/*            "fnDrawCallback": function( oSettings ) {  
                 var api = this.api();
                 var startIndex = api.context[0]._iDisplayStart;
                 //获取到本页开始的条数 　　
                 api.column(1).nodes().each(function (cell, i) {
                     cell.innerHTML = startIndex + i + 1;
                 });
-            }, 
+            }, */
             "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-    
-            "aaSorting": [[ 1, "desc" ]],//默认第几个排序
-            "bStateSave": true,//状态保存
+           
+            /*"bStateSave": true,//状态保存*/
 
             "fnServerParams": function (aoData) {  //查询条件
                 aoData.push(
@@ -143,14 +146,14 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
                 );
             },
 
-            "sAjaxSource": "http://192.168.1.3:8090/AreTalkServer/Web/Api/GetLessonTime.action;jsessionid="+Sessionid + "?rand=" + Math.random(), //分号贼重要！
+            "sAjaxSource": "http://211.159.152.210:8188/AreTalkServer/Web/Api/GetLessonTime.action;jsessionid="+Sessionid + "?rand=" + Math.random(), //分号贼重要！
 
             "columnDefs": [
      
               {
                 "targets": [0],
                 "data": "lessonId",
-                "orderable": true,
+               
                 "render": function (data, type, full) {
                     return data;
                 }
@@ -158,8 +161,8 @@ layui.use(['layer', 'datatable', 'datatableButton', 'datatableFlash', 'datatable
             {
                 "targets": [1],
                 "data": "classNo",
-                "orderable":true,
-                "render": function(data, type, full) {
+               
+                "render": function(data) {
                     return data;
                 }
             },
